@@ -13,4 +13,8 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Coding Challenge"
-include ":app"
+include(":app")
+include(":podcast")
+include(":podcast:podcast_data")
+include(":podcast:podcast_domain")
+include(":podcast:podcast_presentation")
