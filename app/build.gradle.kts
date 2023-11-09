@@ -1,8 +1,8 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("dagger.hilt.android.plugin")
-    id("kotlin-kapt")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -30,20 +30,14 @@ android {
         compose = true
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     composeOptions {
         kotlinCompilerExtensionVersion = Compose.composeCompilerVersion
-    }
-    packagingOptions {
-        exclude("META-INF/AL2.0")
-        exclude("META-INF/LGPL2.1")
-        exclude("**/attach_hotspot_windows.dll")
-        exclude("META-INF/licenses/ASM")
     }
 }
 
@@ -73,4 +67,8 @@ dependencies {
     implementation(Retrofit.okHttpLoggingInterceptor)
     implementation(Retrofit.moshiConverter)
 
+}
+
+kapt {
+    correctErrorTypes = true
 }
