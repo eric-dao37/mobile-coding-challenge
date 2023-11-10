@@ -9,5 +9,7 @@ android {
     namespace = "com.example.podcast_presentation"
 }
 dependencies {
+    implementation(project(Modules.core))
+    implementation(project(Modules.podcastDomain))
     implementation(Coil.coilCompose)
 }
