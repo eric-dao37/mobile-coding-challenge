@@ -6,4 +6,6 @@ interface PodcastRepository {
 
     suspend fun getPodCasts(): Result<List<Podcast>>
 
+//    suspend fun insertPodcastList(podcasts: List<Podcast>)
+
 }

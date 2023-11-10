@@ -1,7 +1,12 @@
 package com.example.podcast_data.di
 
+import android.app.Application
+import androidx.room.Room
+import com.example.podcast_data.local.PodcastDatabase
 import com.example.podcast_data.remote.EndPoints.BASE_URL
 import com.example.podcast_data.remote.PodcastApi
+import com.example.podcast_data.repository.PodcastRepositoryImpl
+import com.example.podcast_domain.repository.PodcastRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,4 +41,24 @@ object PodcastDataModule {
             .client(client)
             .build()
             .create()
+
+    @Provides
+    @Singleton
+    fun providePodcastDatabase(app: Application): PodcastDatabase =
+        Room.databaseBuilder(
+            app,
+            PodcastDatabase::class.java,
+            "podcast_db"
+        ).build()
+
+    @Provides
+    @Singleton
+    fun providePodcastRepository(
+        db: PodcastDatabase,
+        api: PodcastApi,
+    ): PodcastRepository =
+        PodcastRepositoryImpl(
+            dao = db.dao,
+            api = api,
+        )
 }
