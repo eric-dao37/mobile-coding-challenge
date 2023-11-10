@@ -1,9 +1,9 @@
 plugins {
-    id("java-library")
-    id("org.jetbrains.kotlin.jvm")
+    id("com.android.library")
+    id("org.jetbrains.kotlin.android")
 }
+apply(from = "$rootDir/library-module.gradle")
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+android {
+    namespace = "com.example.podcast_domain"
 }

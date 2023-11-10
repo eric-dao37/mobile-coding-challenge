@@ -1,5 +1,7 @@
 package com.example.podcast_data.di
 
+import com.example.podcast_data.remote.EndPoints.BASE_URL
+import com.example.podcast_data.remote.PodcastApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,4 +16,24 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object PodcastDataModule {
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient() : OkHttpClient =
+        OkHttpClient.Builder()
+            .addInterceptor(
+                HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                }
+            ).build()
+
+    @Provides
+    @Singleton
+    fun providePodcastApi(client: OkHttpClient): PodcastApi =
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create())
+            .client(client)
+            .build()
+            .create()
 }

@@ -1,13 +1,12 @@
 plugins {
-    id("java-library")
-    id("org.jetbrains.kotlin.jvm")
+    id("com.android.library")
+    id("org.jetbrains.kotlin.android")
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+apply(from = "$rootDir/library-module.gradle")
+android {
+    namespace = "com.example.podcast_data"
 }
-
 dependencies {
     implementation(project(Modules.podcastDomain))
 
@@ -15,6 +14,7 @@ dependencies {
     implementation(Retrofit.retrofit)
     implementation(Retrofit.okHttpLoggingInterceptor)
     implementation(Retrofit.moshiConverter)
+    implementation(Coroutines.coroutines)
 
 }
 
