@@ -1,5 +1,6 @@
 package com.example.podcast_data.repository
 
+import android.util.Log
 import com.example.podcast_data.local.PodcastDao
 import com.example.podcast_data.mapper.toDomainModel
 import com.example.podcast_data.mapper.toEntity
@@ -20,19 +21,21 @@ class PodcastRepositoryImpl(
                     it.podcast
                 }
             } catch (e: Exception) {
+                Log.i("Podcast Err", ("1" + e.message) ?: "none")
+
                 return Result.failure(e)
             }
-            // cache the network data
+            // save the network data to database
             insertPodcastList(podcastDtoList)
 
-            // return data from cache
-            val podcasts = dao.getAllPodcast()
-            return Result.success(
-                podcasts.map {
-                    it.toDomainModel()
-                }
-            )
+            // return data from local database
+            val podcasts = dao.getAllPodcast().map {
+                it.toDomainModel()
+            }
+            return Result.success(podcasts)
+
         } catch (e: Exception) {
+            Log.i("Podcast Err", ("2" + e.message))
             return Result.failure(e)
         }
     }

@@ -1,4 +1,4 @@
-package com.example.codingchallenge.ui.theme
+package com.example.core
 
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.unit.Dp

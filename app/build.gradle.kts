@@ -42,6 +42,11 @@ android {
 }
 
 dependencies {
+    implementation(project(Modules.core))
+    implementation(project(Modules.podcastData))
+    implementation(project(Modules.podcastDomain))
+    implementation(project(Modules.podcastPresentation))
+
     implementation(Compose.compiler)
     implementation(Compose.ui)
     implementation(Compose.uiToolingPreview)

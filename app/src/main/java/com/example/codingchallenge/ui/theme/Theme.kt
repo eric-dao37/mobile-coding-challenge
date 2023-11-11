@@ -39,7 +39,7 @@ fun CodingChallengeTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @C
     } else {
         LightColorPalette
     }
-    CompositionLocalProvider(LocalSpacing provides Dimensions()) {
+    CompositionLocalProvider(com.example.core.LocalSpacing provides com.example.core.Dimensions()) {
         MaterialTheme(
             colors = colors,
             typography = Typography,

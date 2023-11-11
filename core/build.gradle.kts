@@ -3,7 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
-apply(from = "$rootDir/library-module.gradle")
+apply(from = "$rootDir/compose-module.gradle")
 
 android {
     namespace = "com.example.core"

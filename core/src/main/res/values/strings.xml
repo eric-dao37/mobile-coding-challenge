@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="podcasts">Podcasts</string>
     <string name="error_something_went_wrong">Something went wrong!</string>
 
 </resources>

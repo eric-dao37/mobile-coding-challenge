@@ -12,10 +12,12 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.example.core.R
+import com.example.core.domain.ProgressBarState
 import kotlinx.coroutines.flow.receiveAsFlow
 
 @HiltViewModel
-class PodcastListViewModel @Inject constructor(
+class PodcastListViewModel
+@Inject constructor(
     private val podcastUseCase: PodcastUseCases,
 ): ViewModel() {
 
@@ -31,7 +33,7 @@ class PodcastListViewModel @Inject constructor(
     private fun fetchPodcastList() {
         viewModelScope.launch {
             state = state.copy(
-                isLoading = true,
+                progressBarState = ProgressBarState.Loading,
                 podcastList = emptyList()
             )
             podcastUseCase
@@ -39,11 +41,13 @@ class PodcastListViewModel @Inject constructor(
                 .onSuccess {
                     state = state.copy(
                         podcastList = it,
-                        isLoading = false,
+                        progressBarState = ProgressBarState.Idle,
                     )
                 }
                 .onFailure {
-                    state = state.copy(isLoading = false)
+                    state = state.copy(
+                        progressBarState = ProgressBarState.Idle,
+                    )
                     _uiEvent.send(
                         UiEvent.ShowSnackbar(
                             UiText.StringResource(R.string.error_something_went_wrong)
