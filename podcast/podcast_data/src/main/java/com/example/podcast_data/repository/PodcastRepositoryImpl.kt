@@ -1,6 +1,7 @@
 package com.example.podcast_data.repository
 
-import android.util.Log
+import com.example.core.domain.DataState
+import com.example.core.domain.ProgressBarState
 import com.example.podcast_data.local.PodcastDao
 import com.example.podcast_data.mapper.toDomainModel
 import com.example.podcast_data.mapper.toEntity
@@ -8,23 +9,27 @@ import com.example.podcast_data.remote.PodcastApi
 import com.example.podcast_data.remote.dto.PodcastDto
 import com.example.podcast_domain.model.Podcast
 import com.example.podcast_domain.repository.PodcastRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlin.Exception
 
 class PodcastRepositoryImpl(
     private val dao: PodcastDao,
     private val api: PodcastApi,
 ) : PodcastRepository {
-    override suspend fun getPodCasts(): Result<List<Podcast>> {
+    override suspend fun getPodCasts(): Flow<DataState<List<Podcast>>> = flow {
         try {
+            emit(DataState.Loading(progressBarState = ProgressBarState.Loading))
+
             val podcastDtoList: List<PodcastDto> = try {
                 api.getPodcasts().podcasts.map {
                     it.podcast
                 }
             } catch (e: Exception) {
-                Log.i("Podcast Err", ("1" + e.message) ?: "none")
-
-                return Result.failure(e)
+                emit(DataState.Error(e.message?: "Unknown Error"))
+                listOf()
             }
+
             // save the network data to database
             insertPodcastList(podcastDtoList)
 
@@ -32,11 +37,15 @@ class PodcastRepositoryImpl(
             val podcasts = dao.getAllPodcast().map {
                 it.toDomainModel()
             }
-            return Result.success(podcasts)
+            emit(DataState.Data(podcasts))
+
 
         } catch (e: Exception) {
-            Log.i("Podcast Err", ("2" + e.message))
-            return Result.failure(e)
+            emit(DataState.Error(e.message?: "Unknown Error"))
+        }
+
+        finally {
+            emit(DataState.Loading(progressBarState = ProgressBarState.Idle))
         }
     }
 

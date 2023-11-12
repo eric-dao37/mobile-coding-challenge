@@ -8,6 +8,7 @@ android {
     namespace = "com.example.podcast_data"
 }
 dependencies {
+    implementation(project(Modules.core))
     implementation(project(Modules.podcastDomain))
 
     implementation(Retrofit.okHttp)

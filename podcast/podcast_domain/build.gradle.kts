@@ -7,3 +7,7 @@ apply(from = "$rootDir/library-module.gradle")
 android {
     namespace = "com.example.podcast_domain"
 }
+
+dependencies {
+    implementation(project(Modules.core))
+}
