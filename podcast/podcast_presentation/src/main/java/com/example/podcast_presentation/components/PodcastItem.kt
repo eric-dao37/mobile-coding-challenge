@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
@@ -27,6 +28,7 @@ import coil.compose.rememberImagePainter
 import com.example.core.LocalSpacing
 import com.example.podcast_domain.model.Podcast
 import com.example.core.R
+import com.example.core.util.UiText
 
 @ExperimentalCoilApi
 @Composable
@@ -36,17 +38,17 @@ fun PodcastItem(
     modifier: Modifier = Modifier,
 ) {
     val spacing = LocalSpacing.current
+    val context = LocalContext.current
+
     Row(
         modifier = modifier
-            .clip(RoundedCornerShape(5.dp))
+            .clip(RoundedCornerShape(
+                topStart = spacing.roundedConnerMedium,
+                bottomStart = spacing.roundedConnerMedium,
+            ))
             .padding(spacing.spaceExtraSmall)
-            .shadow(
-                elevation = 1.dp,
-                shape = RoundedCornerShape(5.dp)
-            )
-            .background(MaterialTheme.colors.surface)
-            .padding(end = spacing.spaceMedium)
-            .height(100.dp),
+            .padding(horizontal = spacing.spaceMedium)
+            .height(spacing.podcastItemHeight),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -65,42 +67,33 @@ fun PodcastItem(
                 .fillMaxHeight()
                 .aspectRatio(1f)
                 .clip(
-                    RoundedCornerShape(
-                        topStart = 5.dp,
-                        bottomStart = 5.dp
-                    )
+                    RoundedCornerShape(spacing.roundedConnerMedium)
                 )
         )
         Spacer(modifier = Modifier.width(spacing.spaceMedium))
         Column(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .align(
+                    alignment = Alignment.Top
+                )
+                .weight(1f)
         ) {
             Text(
                 text = podcast.title,
-                style = MaterialTheme.typography.body1,
+                style = MaterialTheme.typography.h4,
                 overflow = TextOverflow.Ellipsis,
-                maxLines = 2
+                maxLines = 1
             )
-            Spacer(modifier = Modifier.height(spacing.spaceExtraSmall))
-            Text(text = podcast.title,
-                style = MaterialTheme.typography.body2
-            )
-        }
-        Spacer(modifier = Modifier.width(spacing.spaceMedium))
-        Column(
-            modifier = Modifier.fillMaxHeight(),
-            verticalArrangement = Arrangement.Center
-        ) {
             Text(
                 text = podcast.publisherName,
                 style = MaterialTheme.typography.body2
             )
-            Spacer(modifier = Modifier.height(spacing.spaceExtraSmall))
-            Text(
-                text = podcast.isFavourite.toString(),
-                style = MaterialTheme.typography.body2
-            )
-
+            if (podcast.isFavourite)
+                Text(
+                    text = UiText.StringResource(R.string.favourited).asString(context),
+                    style = MaterialTheme.typography.body2,
+                    color = MaterialTheme.colors.error,
+                )
         }
     }
 }

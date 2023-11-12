@@ -2,6 +2,7 @@ package com.example.podcast_presentation.podcast_list
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,9 +18,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
+import com.example.core.LocalSpacing
 import com.example.core.R
 import com.example.core.components.DefaultScreenUI
 import com.example.core.util.UiEvent
+import com.example.core.util.UiText
 import com.example.podcast_presentation.components.PodcastItem
 
 @ExperimentalCoilApi
@@ -32,6 +35,7 @@ fun PodcastListScreen(
 ) {
     val state = viewModel.state
     val context = LocalContext.current
+    val spacing = LocalSpacing.current
 
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
@@ -49,19 +53,25 @@ fun PodcastListScreen(
     DefaultScreenUI(
         progressBarState = state.progressBarState,
     ) {
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
         ){
             Text(
-                text = "Podcasts",
-                style = MaterialTheme.typography.body2,
+                text = UiText.StringResource(R.string.podcasts).asString(context = context),
+                style = MaterialTheme.typography.h2,
+                modifier = Modifier
+                    .padding(
+                        horizontal = spacing.spaceMedium,
+                        vertical = spacing.spaceSmall,
+                    )
+
             )
             AnimatedVisibility(visible = state.podcastList.isNotEmpty()) {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(top = 8.dp)
+                        .padding(top = spacing.spaceMedium)
                 ) {
                     items(state.podcastList) { podcast ->
                         PodcastItem(
