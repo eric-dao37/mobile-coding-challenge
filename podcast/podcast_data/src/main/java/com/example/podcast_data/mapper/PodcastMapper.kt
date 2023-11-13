@@ -15,7 +15,6 @@ fun PodcastObjectDto.toEntity(): PodcastEntity {
         thumbnail = podcast.thumbnail,
         publisherName = podcast.publisherName,
         description = description,
-        isFavourite = false
     )
 }
 
