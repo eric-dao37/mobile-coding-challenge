@@ -22,7 +22,7 @@ class PodcastRepositoryImpl(
             emit(DataState.Loading(progressBarState = ProgressBarState.Loading))
 
             val podcastEntityList: List<PodcastEntity> = try {
-                api.getPodcasts().podcasts.map {
+                api.getPodcasts().podcasts.mapNotNull {
                     it.toEntity()
                 }
             } catch (e: Exception) {

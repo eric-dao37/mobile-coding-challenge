@@ -1,6 +1,6 @@
 package com.example.podcast_data.remote
 
 object EndPoints {
-    const val BASE_URL = "https://listen-api-test.listennotes.com/"
-    const val GET_PODCAST_URL = "api/v2/search?q=startup"
+    const val BASE_URL = "https://listen-api-test.listennotes.com/api/v2/"
+    const val GET_PODCAST_URL = "best_podcasts"
 }
