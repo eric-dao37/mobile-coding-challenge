@@ -13,19 +13,21 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavController
+import com.example.core.domain.ProgressBarState
 
 @Composable
 fun ToolbarScreenUI(
+    navController: NavController,
+    progressBarState: ProgressBarState = ProgressBarState.Idle,
     title: String? = null,
     content: @Composable () -> Unit,
 ) {
-    val navController = rememberNavController()
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(text = title ?: "") },
-                navigationIcon = if (navController.previousBackStackEntry != null) {
+                navigationIcon =
                     {
                         IconButton(onClick = { navController.navigateUp() }) {
                             Icon(
@@ -33,10 +35,7 @@ fun ToolbarScreenUI(
                                 contentDescription = "Back"
                             )
                         }
-                    }
-                } else {
-                    null
-                },
+                    },
                 backgroundColor = Color.White
             )
         },
@@ -50,6 +49,9 @@ fun ToolbarScreenUI(
                     )
             ) {
                 content()
+                if(progressBarState is ProgressBarState.Loading){
+                    CircularIndeterminateProgressBar()
+                }
             }
         }
     )

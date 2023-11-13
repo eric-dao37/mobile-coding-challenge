@@ -88,6 +88,7 @@ fun NavGraphBuilder.addPodcastDetail(
     ){
         PodcastDetailScreen(
             scaffoldState = scaffoldState,
+            navController = navController,
         )
     }
 }

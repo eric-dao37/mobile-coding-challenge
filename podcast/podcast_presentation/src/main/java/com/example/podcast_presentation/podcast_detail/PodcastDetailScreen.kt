@@ -31,11 +31,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.example.core.LocalSpacing
 import com.example.core.Pink
-import com.example.core.components.DefaultScreenUI
 import com.example.core.components.ToolbarScreenUI
 import com.example.core.R
 import com.example.core.util.UiEvent
@@ -45,6 +45,7 @@ import com.example.core.util.UiEvent
 @Composable
 fun PodcastDetailScreen (
     scaffoldState: ScaffoldState,
+    navController: NavController,
     viewModel: PodcastDetailViewModel = hiltViewModel()
 ) {
     val state = viewModel.state
@@ -63,100 +64,99 @@ fun PodcastDetailScreen (
             }
         }
     }
-
-    DefaultScreenUI(
+    ToolbarScreenUI(
+        navController = navController,
         progressBarState = state.progressBarState,
     ) {
-        ToolbarScreenUI {
-            state.podcast?.let { podcast ->
-                Column(
+        state.podcast?.let { podcast ->
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colors.background)
+                    .padding(spacing.spaceMedium),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(vertical = spacing.spaceSmall)
+                        .align(alignment = Alignment.CenterHorizontally),
+                    text = podcast.title,
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.h3,
+                )
+                Text(
+                    modifier = Modifier
+                        .align(alignment = Alignment.CenterHorizontally),
+                    text = podcast.publisherName,
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.subtitle1,
+                )
+                Spacer(modifier = Modifier.height(spacing.spaceSmall))
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(MaterialTheme.colors.background)
-                        .padding(vertical = spacing.spaceMedium),
-                    verticalArrangement = Arrangement.Top,
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                        .height(spacing.podcastImageSizeLarge),
+                    horizontalArrangement = Arrangement.Center,
+                ) {
+                    Image(
+                        painter = rememberImagePainter(
+                            data = podcast.thumbnail,
+                            builder = {
+                                crossfade(true)
+                                error(R.drawable.baseline_image)
+                                fallback(R.drawable.baseline_image)
+                            }
+                        ),
+                        contentDescription = podcast.title,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .aspectRatio(1f)
+                            .clip(
+                                RoundedCornerShape(spacing.roundedConnerMedium)
+                            )
+                    )
+                }
+                Spacer(modifier = Modifier.height(spacing.spaceSmall))
+                Button(
+                    onClick = {  },
+                    modifier = Modifier.padding(
+                        horizontal = spacing.spaceMedium,
+                        vertical = spacing.spaceExtraSmall,
+                    ),
+                    shape = RoundedCornerShape(spacing.roundedConnerMedium),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Pink)
                 ) {
                     Text(
-                        modifier = Modifier
-                            .padding(vertical = spacing.spaceSmall)
-                            .align(alignment = Alignment.CenterHorizontally),
-                        text = podcast.title,
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.h3,
+                        text = if (podcast.isFavourite)
+                            stringResource(id = R.string.favourited)
+                        else stringResource(id = R.string.favourite),
+                        color = Color.White,
                     )
+                }
+
+                Spacer(modifier = Modifier.height(spacing.spaceSmall))
+
+                Column(
+                    modifier = Modifier
+                        .verticalScroll(rememberScrollState())
+                        .weight(
+                            weight =1f,
+                            fill = false
+                        )
+                ) {
                     Text(
-                        modifier = Modifier
-                            .align(alignment = Alignment.CenterHorizontally),
-                        text = podcast.publisherName,
+                        text = podcast.description,
                         textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.subtitle1,
-                    )
-                    Spacer(modifier = Modifier.height(spacing.spaceSmall))
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(spacing.podcastImageSizeLarge),
-                        horizontalArrangement = Arrangement.Center,
-                    ) {
-                        Image(
-                            painter = rememberImagePainter(
-                                data = podcast.thumbnail,
-                                builder = {
-                                    crossfade(true)
-                                    error(R.drawable.baseline_image)
-                                    fallback(R.drawable.baseline_image)
-                                }
-                            ),
-                            contentDescription = podcast.title,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .aspectRatio(1f)
-                                .clip(
-                                    RoundedCornerShape(spacing.roundedConnerMedium)
-                                )
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(spacing.spaceSmall))
-                    Button(
-                        onClick = {  },
+                        style = MaterialTheme.typography.subtitle2,
                         modifier = Modifier.padding(
-                            horizontal = spacing.spaceMedium,
-                            vertical = spacing.spaceExtraSmall,
-                        ),
-                        shape = RoundedCornerShape(spacing.roundedConnerMedium),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Pink)
-                    ) {
-                        Text(
-                            text = if (podcast.isFavourite)
-                                stringResource(id = R.string.favourited)
-                            else stringResource(id = R.string.favourite),
-                            color = Color.White,
+                            horizontal = spacing.spaceMedium
                         )
-                    }
-
-                    Spacer(modifier = Modifier.height(spacing.spaceSmall))
-
-                    Column(
-                        modifier = Modifier
-                            .verticalScroll(rememberScrollState())
-                            .weight(
-                                weight =1f,
-                                fill = false
-                            )
-                    ) {
-                        Text(
-                            text = podcast.description,
-                            textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.subtitle2,
-                            modifier = Modifier.padding(
-                                horizontal = spacing.spaceMedium
-                            )
-                        )
-                    }
+                    )
                 }
             }
         }
     }
+
 }
