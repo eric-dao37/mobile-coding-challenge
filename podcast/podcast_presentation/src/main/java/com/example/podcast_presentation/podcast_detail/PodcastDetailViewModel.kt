@@ -1,6 +1,5 @@
 package com.example.podcast_presentation.podcast_detail
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -70,7 +69,7 @@ class PodcastDetailViewModel
 
     private fun updatePodcast(podcast: Podcast) {
         viewModelScope.launch(Dispatchers.IO) {
-            podcastUseCase.updatePodcast(podcast = podcast).collect(::handleDataState)
+            podcastUseCase.updatePodcast(podcast = podcast)
         }
     }
 
@@ -82,7 +81,6 @@ class PodcastDetailViewModel
 
     private fun handleDataState(dataState: DataState<Podcast>) {
         viewModelScope.launch {
-            Log.i("data state receive", dataState.toString())
             when (dataState) {
                 is DataState.Loading -> {
                     state = state.copy(
@@ -92,11 +90,15 @@ class PodcastDetailViewModel
 
                 is DataState.Data -> {
                     state = state.copy(
-                        podcast = dataState.value
+                        podcast = dataState.data,
+                        progressBarState = dataState.progressBarState
                     )
                 }
 
                 is DataState.Error -> {
+                    state = state.copy(
+                        progressBarState = dataState.progressBarState
+                    )
                     _uiEvent.send(
                         UiEvent.ShowSnackbar(
                             UiText.DynamicString(dataState.message)

@@ -29,7 +29,9 @@ fun ToolbarScreenUI(
                 title = { Text(text = title ?: "") },
                 navigationIcon =
                     {
-                        IconButton(onClick = { navController.navigateUp() }) {
+                        IconButton(onClick = {
+                            navController.navigateUp()
+                        }) {
                             Icon(
                                 imageVector = Icons.Filled.ArrowBack,
                                 contentDescription = "Back"

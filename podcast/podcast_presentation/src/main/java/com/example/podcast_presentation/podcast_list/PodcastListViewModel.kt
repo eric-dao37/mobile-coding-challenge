@@ -49,10 +49,14 @@ class PodcastListViewModel
                     }
                     is DataState.Data -> {
                         state = state.copy(
-                            podcastList = dataState.value
+                            podcastList = dataState.data,
+                            progressBarState = dataState.progressBarState,
                         )
                     }
                     is DataState.Error -> {
+                        state = state.copy(
+                            progressBarState = dataState.progressBarState,
+                        )
                         _uiEvent.send(
                             UiEvent.ShowSnackbar(
                                 UiText.DynamicString(dataState.message)

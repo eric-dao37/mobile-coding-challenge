@@ -7,7 +7,6 @@ import com.example.podcast_data.local.entity.PodcastEntity
 import com.example.podcast_data.mapper.toDomainModel
 import com.example.podcast_data.mapper.toEntity
 import com.example.podcast_data.remote.PodcastApi
-import com.example.podcast_data.remote.dto.PodcastDto
 import com.example.podcast_domain.model.Podcast
 import com.example.podcast_domain.repository.PodcastRepository
 import kotlinx.coroutines.flow.Flow
@@ -35,11 +34,12 @@ class PodcastRepositoryImpl(
             insertPodcastList(podcastEntityList)
 
             // return data from local database
-            val podcasts = dao.getAllPodcast().map {
-                it.toDomainModel()
+            dao.getAllPodcast().collect{ list->
+                 val podcasts = list.map {
+                    it.toDomainModel()
+                }
+                emit(DataState.Data(podcasts))
             }
-            emit(DataState.Data(podcasts))
-
 
         } catch (e: Exception) {
             emit(DataState.Error(e.message?: "Unknown Error"))
@@ -55,13 +55,15 @@ class PodcastRepositoryImpl(
             emit(DataState.Loading(progressBarState = ProgressBarState.Loading))
 
             // emit data from network
-            val cachedPodcast = dao.getPodcastDetail(id).filter {
-                it.id == id
-            }.map {
-                it.toDomainModel()
-            }.firstOrNull() ?: throw Exception("That podcast does not exist in the cache.")
+            dao.getPodcastDetail(id).collect { list ->
+                val cachedPodcast = list.filter {
+                    it.id == id
+                }.map {
+                    it.toDomainModel()
+                }.firstOrNull() ?: throw Exception("That podcast does not exist in the cache.")
 
-            emit(DataState.Data(cachedPodcast))
+                emit(DataState.Data(cachedPodcast))
+            }
         }catch (e: Exception){
             e.printStackTrace()
             emit(DataState.Error(e.message ?: "Unknown Error"))
@@ -71,26 +73,12 @@ class PodcastRepositoryImpl(
         }
     }
 
-    override suspend fun updatePodcast(podcast: Podcast): Flow<DataState<Podcast>> = flow {
+    override suspend fun updatePodcast(podcast: Podcast) {
         try {
-            emit(DataState.Loading(progressBarState = ProgressBarState.Loading))
             //Update data
             dao.updatePodcast(podcast.toEntity())
-
-            // emit data from network
-            val cachedPodcast = dao.getPodcastDetail(podcast.id).filter {
-                it.id == podcast.id
-            }.map {
-                it.toDomainModel()
-            }.firstOrNull() ?: throw Exception("That podcast does not exist in the cache.")
-
-            emit(DataState.Data(cachedPodcast))
         }catch (e: Exception){
             e.printStackTrace()
-            emit(DataState.Error(e.message ?: "Unknown Error"))
-        }
-        finally {
-            emit(DataState.Loading(progressBarState = ProgressBarState.Idle))
         }
     }
 

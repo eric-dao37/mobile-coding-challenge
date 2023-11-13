@@ -19,14 +19,14 @@ interface PodcastDao {
             FROM podcastentity
             WHERE id = :podcastId
         """)
-    fun getPodcastDetail(podcastId: String): List<PodcastEntity>
+    fun getPodcastDetail(podcastId: String): Flow<List<PodcastEntity>>
 
     @Query(
         """
             SELECT *
             FROM podcastentity
         """)
-    fun getAllPodcast(): List<PodcastEntity>
+    fun getAllPodcast(): Flow<List<PodcastEntity>>
 
     @Update
     fun updatePodcast(postCastEntity: PodcastEntity)
