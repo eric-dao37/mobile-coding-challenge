@@ -4,5 +4,6 @@
     <string name="error_something_went_wrong">Something went wrong!</string>
     <string name="favourited">Favourited</string>
     <string name="favourite">Favourite</string>
+    <string name="cannot_get_podcast_detail">Unable to retrieve the details for this podcast.</string>
 
 </resources>

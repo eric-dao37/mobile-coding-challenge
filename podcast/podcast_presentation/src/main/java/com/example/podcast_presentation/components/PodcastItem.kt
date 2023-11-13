@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.example.core.LocalSpacing
+import com.example.core.Pink
 import com.example.podcast_domain.model.Podcast
 import com.example.core.R
 
@@ -103,7 +104,7 @@ fun PodcastItem(
                     Text(
                         text = stringResource(R.string.favourited),
                         style = MaterialTheme.typography.body2,
-                        color = MaterialTheme.colors.error,
+                        color = Pink,
                     )
             }
         }

@@ -120,7 +120,7 @@ fun PodcastDetailScreen (
                 }
                 Spacer(modifier = Modifier.height(spacing.spaceSmall))
                 Button(
-                    onClick = {  },
+                    onClick = { viewModel.onEvent(PodcastDetailEvent.OnFavouriteClick) },
                     modifier = Modifier.padding(
                         horizontal = spacing.spaceMedium,
                         vertical = spacing.spaceExtraSmall,

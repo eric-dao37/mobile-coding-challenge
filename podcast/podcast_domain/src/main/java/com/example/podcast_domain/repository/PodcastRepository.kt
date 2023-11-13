@@ -10,6 +10,6 @@ interface PodcastRepository {
 
     suspend fun getPodcastDetail(id: String): Flow<DataState<Podcast>>
 
-    suspend fun updatePodcast(podcast: Podcast)
+    suspend fun updatePodcast(podcast: Podcast): Flow<DataState<Podcast>>
 
 }

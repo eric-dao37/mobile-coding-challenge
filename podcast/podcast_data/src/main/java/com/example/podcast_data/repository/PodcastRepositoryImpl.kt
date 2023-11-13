@@ -71,8 +71,27 @@ class PodcastRepositoryImpl(
         }
     }
 
-    override suspend fun updatePodcast(podcast: Podcast) {
-        dao.updatePodcast(podcast.toEntity())
+    override suspend fun updatePodcast(podcast: Podcast): Flow<DataState<Podcast>> = flow {
+        try {
+            emit(DataState.Loading(progressBarState = ProgressBarState.Loading))
+            //Update data
+            dao.updatePodcast(podcast.toEntity())
+
+            // emit data from network
+            val cachedPodcast = dao.getPodcastDetail(podcast.id).filter {
+                it.id == podcast.id
+            }.map {
+                it.toDomainModel()
+            }.firstOrNull() ?: throw Exception("That podcast does not exist in the cache.")
+
+            emit(DataState.Data(cachedPodcast))
+        }catch (e: Exception){
+            e.printStackTrace()
+            emit(DataState.Error(e.message ?: "Unknown Error"))
+        }
+        finally {
+            emit(DataState.Loading(progressBarState = ProgressBarState.Idle))
+        }
     }
 
     private suspend fun insertPodcastList(podcasts: List<PodcastEntity>) {
