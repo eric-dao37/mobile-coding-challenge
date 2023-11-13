@@ -15,6 +15,8 @@ data class Dimensions(
     val roundedConnerMedium: Dp = 16.dp,
     val roundedConnerLarge: Dp = 26.dp,
     val podcastItemHeight: Dp = 80.dp,
+    val podcastImageSizeLarge: Dp = 180.dp,
+
     )
 
 val LocalSpacing = compositionLocalOf { Dimensions() }

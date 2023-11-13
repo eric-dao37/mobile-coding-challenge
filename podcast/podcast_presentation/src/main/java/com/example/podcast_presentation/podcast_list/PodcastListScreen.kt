@@ -15,6 +15,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
@@ -30,7 +31,7 @@ import com.example.podcast_presentation.components.PodcastItem
 @Composable
 fun PodcastListScreen(
     scaffoldState: ScaffoldState,
-//    onNavigateToDetail: (detailId: String) -> Unit,
+    onNavigateToDetail: (podcastIdId: String) -> Unit,
     viewModel: PodcastListViewModel = hiltViewModel()
 ) {
     val state = viewModel.state
@@ -58,7 +59,7 @@ fun PodcastListScreen(
                 .fillMaxSize()
         ){
             Text(
-                text = UiText.StringResource(R.string.podcasts).asString(context = context),
+                text = stringResource(R.string.podcasts),
                 style = MaterialTheme.typography.h2,
                 modifier = Modifier
                     .padding(
@@ -76,7 +77,7 @@ fun PodcastListScreen(
                     items(state.podcastList) { podcast ->
                         PodcastItem(
                             podcast = podcast,
-                            onPodcastItemSelect = {},
+                            onPodcastItemSelect = onNavigateToDetail,
                         )
                     }
                 }

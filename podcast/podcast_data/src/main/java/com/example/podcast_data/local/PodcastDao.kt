@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.example.podcast_data.local.entity.PodcastEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -18,7 +19,7 @@ interface PodcastDao {
             FROM podcastentity
             WHERE id = :podcastId
         """)
-    fun getPodcastDetail(podcastId: String): Flow<List<PodcastEntity>>
+    fun getPodcastDetail(podcastId: String): List<PodcastEntity>
 
     @Query(
         """
@@ -26,4 +27,7 @@ interface PodcastDao {
             FROM podcastentity
         """)
     fun getAllPodcast(): List<PodcastEntity>
+
+    @Update
+    fun updatePodcast(postCastEntity: PodcastEntity)
 }

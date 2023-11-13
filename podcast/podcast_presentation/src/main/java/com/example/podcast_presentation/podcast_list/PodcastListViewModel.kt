@@ -34,9 +34,7 @@ class PodcastListViewModel
 
     private fun fetchPodcastList() {
         viewModelScope.launch(Dispatchers.IO) {
-            podcastUseCase.getPodcast().collect { dataState ->
-                handleDataState(dataState)
-            }
+            podcastUseCase.getPodcastList().collect(::handleDataState)
         }
     }
 

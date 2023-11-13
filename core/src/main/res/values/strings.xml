@@ -3,4 +3,6 @@
     <string name="podcasts">Podcasts</string>
     <string name="error_something_went_wrong">Something went wrong!</string>
     <string name="favourited">Favourited</string>
+    <string name="favourite">Favourite</string>
+
 </resources>

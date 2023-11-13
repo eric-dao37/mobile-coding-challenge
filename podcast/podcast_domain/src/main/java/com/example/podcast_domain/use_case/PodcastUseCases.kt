@@ -1,5 +1,7 @@
 package com.example.podcast_domain.use_case
 
 data class PodcastUseCases (
-    val getPodcast: GetPodcast,
+    val getPodcastList: GetPodcastList,
+    val getPodcastDetail: GetPodcastDetail,
+    val updatePodcast: UpdatePodcast,
 )

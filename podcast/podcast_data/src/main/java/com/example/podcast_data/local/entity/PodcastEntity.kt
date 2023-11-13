@@ -9,5 +9,6 @@ data class PodcastEntity (
     val title: String,
     val thumbnail: String,
     val publisherName: String,
+    val description: String,
     val isFavourite: Boolean,
 )
