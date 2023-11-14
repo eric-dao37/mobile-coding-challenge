@@ -35,4 +35,7 @@ interface PodcastDao {
 
     @Query("SELECT * FROM podcastentity")
     fun pagingSource(): PagingSource<Int, PodcastEntity>
+
+    @Query("DELETE FROM podcastentity")
+    suspend fun clearAll()
 }

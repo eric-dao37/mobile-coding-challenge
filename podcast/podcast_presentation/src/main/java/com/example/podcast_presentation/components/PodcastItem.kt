@@ -98,7 +98,9 @@ fun PodcastItem(
                 )
                 Text(
                     text = podcast.publisherName,
-                    style = MaterialTheme.typography.body2
+                    style = MaterialTheme.typography.body2,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
                 )
                 if (podcast.isFavourite)
                     Text(
