@@ -44,7 +44,6 @@ class MainActivity : ComponentActivity() {
                     ) {
                         addPodcastList(
                             navController = navController,
-                            scaffoldState = scaffoldState,
                         )
                         addPodcastDetail(
                             navController = navController,
@@ -61,13 +60,11 @@ class MainActivity : ComponentActivity() {
 @ExperimentalComposeUiApi
 fun NavGraphBuilder.addPodcastList(
     navController: NavController,
-    scaffoldState: ScaffoldState,
 ) {
     composable(
         route = Screen.PodcastList.route,
     ){
         PodcastListScreen(
-            scaffoldState = scaffoldState,
             onNavigateToDetail = { podcastId ->
                 navController.navigate("${Screen.PodcastDetail.route}/$podcastId")
             },

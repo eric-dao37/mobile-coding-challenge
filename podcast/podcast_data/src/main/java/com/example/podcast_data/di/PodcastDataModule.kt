@@ -79,12 +79,10 @@ object PodcastDataModule {
     @Singleton
     fun providePodcastRepository(
         db: PodcastDatabase,
-        api: PodcastApi,
         podcastPager: Pager<Int, PodcastEntity>
     ): PodcastRepository =
         PodcastRepositoryImpl(
             dao = db.podcastDao,
-            api = api,
             podcastPager = podcastPager,
         )
 

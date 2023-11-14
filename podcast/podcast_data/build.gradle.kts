@@ -6,6 +6,7 @@ plugins {
 apply(from = "$rootDir/library-module.gradle")
 android {
     namespace = "com.example.podcast_data"
+
 }
 dependencies {
     implementation(project(Modules.core))
@@ -17,9 +18,9 @@ dependencies {
     implementation(Retrofit.moshiConverter)
     implementation(Coroutines.coroutines)
 
-    "kapt"(Room.roomCompiler)
     implementation(Room.roomKtx)
     implementation(Room.roomRuntime)
     implementation(Room.roomPaging)
+    "kapt"(Room.roomCompiler)
 }
 

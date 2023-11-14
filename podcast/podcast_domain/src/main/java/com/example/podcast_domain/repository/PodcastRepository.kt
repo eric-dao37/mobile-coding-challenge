@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface PodcastRepository {
 
 //    suspend fun getPodcasts(): Flow<DataState<List<Podcast>>>
-    fun getPodcasts():Flow<PagingData<Podcast>>
+    fun getPodcasts(): Flow<PagingData<Podcast>>
     suspend fun getPodcastDetail(id: String): Flow<DataState<Podcast>>
 
     suspend fun updatePodcast(podcast: Podcast)

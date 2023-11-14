@@ -6,7 +6,8 @@ import com.example.podcast_data.local.entity.PodcastEntity
 
 @Database(
     entities = [PodcastEntity::class, ],
-    version = 1
+    version = 1,
+    exportSchema = false,
 )
 abstract class PodcastDatabase: RoomDatabase() {
     abstract val podcastDao: PodcastDao

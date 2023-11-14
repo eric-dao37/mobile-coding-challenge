@@ -28,8 +28,8 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.example.core.LocalSpacing
 import com.example.core.Pink
-import com.example.podcast_domain.model.Podcast
 import com.example.core.R
+import com.example.podcast_domain.model.Podcast
 
 @ExperimentalCoilApi
 @Composable

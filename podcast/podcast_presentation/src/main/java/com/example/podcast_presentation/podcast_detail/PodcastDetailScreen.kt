@@ -36,8 +36,8 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.example.core.LocalSpacing
 import com.example.core.Pink
-import com.example.core.components.ToolbarScreenUI
 import com.example.core.R
+import com.example.core.components.ToolbarScreenUI
 import com.example.core.util.UiEvent
 
 @ExperimentalCoilApi
