@@ -1,5 +1,6 @@
 package com.example.podcast_data.local
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -18,19 +19,20 @@ interface PodcastDao {
 
     @Query(
         """
-            SELECT *
-            FROM podcastentity
+            SELECT * FROM podcastentity
             WHERE id = :podcastId
         """)
     fun getPodcastDetail(podcastId: String): Flow<List<PodcastEntity>>
 
     @Query(
         """
-            SELECT *
-            FROM podcastentity
+            SELECT * FROM podcastentity
         """)
     fun getAllPodcast(): Flow<List<PodcastEntity>>
 
     @Update
     fun updatePodcast(postCastEntity: PodcastEntity)
+
+    @Query("SELECT * FROM podcastentity")
+    fun pagingSource(): PagingSource<Int, PodcastEntity>
 }

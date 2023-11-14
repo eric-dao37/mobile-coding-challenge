@@ -1,10 +1,15 @@
 package com.example.podcast_data.di
 
 import android.app.Application
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import androidx.room.Room
 import com.example.podcast_data.local.PodcastDatabase
+import com.example.podcast_data.local.entity.PodcastEntity
 import com.example.podcast_data.remote.EndPoints.BASE_URL
 import com.example.podcast_data.remote.PodcastApi
+import com.example.podcast_data.remote.PodcastRemoteMediator
 import com.example.podcast_data.repository.PodcastRepositoryImpl
 import com.example.podcast_domain.repository.PodcastRepository
 import dagger.Module
@@ -49,16 +54,38 @@ object PodcastDataModule {
             app,
             PodcastDatabase::class.java,
             "podcast_db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
+
+    @OptIn(ExperimentalPagingApi::class)
+    @Provides
+    @Singleton
+    fun providePodcastPager(
+        database: PodcastDatabase,
+        api: PodcastApi,
+    ): Pager<Int, PodcastEntity> {
+        return Pager(
+            config = PagingConfig(pageSize = 10),
+            remoteMediator = PodcastRemoteMediator(
+                podcastDatabase = database,
+                podcastApi = api,
+            ),
+            pagingSourceFactory = {
+                database.podcastDao.pagingSource()
+            },
+        )
+    }
 
     @Provides
     @Singleton
     fun providePodcastRepository(
         db: PodcastDatabase,
         api: PodcastApi,
+        podcastPager: Pager<Int, PodcastEntity>
     ): PodcastRepository =
         PodcastRepositoryImpl(
-            dao = db.dao,
+            dao = db.podcastDao,
             api = api,
+            podcastPager = podcastPager,
         )
+
 }

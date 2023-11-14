@@ -5,11 +5,9 @@ import androidx.room.RoomDatabase
 import com.example.podcast_data.local.entity.PodcastEntity
 
 @Database(
-    entities = [PodcastEntity::class],
+    entities = [PodcastEntity::class, ],
     version = 1
 )
 abstract class PodcastDatabase: RoomDatabase() {
-
-    abstract val dao: PodcastDao
-
+    abstract val podcastDao: PodcastDao
 }

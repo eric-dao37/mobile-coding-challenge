@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
@@ -18,12 +19,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import coil.annotation.ExperimentalCoilApi
 import com.example.core.LocalSpacing
 import com.example.core.R
 import com.example.core.components.DefaultScreenUI
+import com.example.core.domain.ProgressBarState
 import com.example.core.util.UiEvent
 import com.example.core.util.UiText
+import com.example.podcast_domain.model.Podcast
 import com.example.podcast_presentation.components.PodcastItem
 
 @ExperimentalCoilApi
@@ -34,25 +41,27 @@ fun PodcastListScreen(
     onNavigateToDetail: (podcastIdId: String) -> Unit,
     viewModel: PodcastListViewModel = hiltViewModel()
 ) {
-    val state = viewModel.state
+//    val state = viewModel.state
     val context = LocalContext.current
     val spacing = LocalSpacing.current
+    val podcastPagingItems: LazyPagingItems<Podcast> = viewModel.podcastPagingDataFlow.collectAsLazyPagingItems()
 
-    LaunchedEffect(key1 = true) {
-        viewModel.uiEvent.collect { event ->
-            when (event) {
-                is UiEvent.ShowSnackbar -> {
-                    scaffoldState.snackbarHostState.showSnackbar(
-                        message = event.message.asString(context)
-                    )
-                }
-                else -> Unit
-            }
-        }
-    }
+//    LaunchedEffect(key1 = true) {
+//        viewModel.uiEvent.collect { event ->
+//            when (event) {
+//                is UiEvent.ShowSnackbar -> {
+//                    scaffoldState.snackbarHostState.showSnackbar(
+//                        message = event.message.asString(context)
+//                    )
+//                }
+//                else -> Unit
+//            }
+//        }
+//    }
 
     DefaultScreenUI(
-        progressBarState = state.progressBarState,
+        progressBarState = if (podcastPagingItems.loadState.refresh is LoadState.Loading)
+            ProgressBarState.Loading else ProgressBarState.Idle,
     ) {
         Column(
             modifier = Modifier
@@ -68,17 +77,27 @@ fun PodcastListScreen(
                     )
 
             )
-            AnimatedVisibility(visible = state.podcastList.isNotEmpty()) {
+            AnimatedVisibility(visible = podcastPagingItems.itemCount > 0) {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(top = spacing.spaceMedium)
                 ) {
-                    items(state.podcastList) { podcast ->
-                        PodcastItem(
-                            podcast = podcast,
-                            onPodcastItemSelect = onNavigateToDetail,
-                        )
+                    items(
+                        count = podcastPagingItems.itemCount,
+                        key = podcastPagingItems.itemKey{it.id}
+                    ) { index ->
+                        val podcast = podcastPagingItems[index]
+                        if (podcast != null)
+                            PodcastItem(
+                                podcast = podcast,
+                                onPodcastItemSelect = onNavigateToDetail,
+                            )
+                    }
+                    item {
+                        if (podcastPagingItems.loadState.append is LoadState.Loading) {
+                            CircularProgressIndicator(modifier = Modifier.padding(16.dp))
+                        }
                     }
                 }
             }

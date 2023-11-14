@@ -4,6 +4,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import com.example.core.util.UiEvent
 import com.example.core.util.UiText
 import com.example.podcast_domain.use_case.PodcastUseCases
@@ -14,8 +15,11 @@ import javax.inject.Inject
 import com.example.core.domain.DataState
 import com.example.podcast_domain.model.Podcast
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.withContext
+import androidx.paging.cachedIn
+import androidx.paging.map
 
 @HiltViewModel
 class PodcastListViewModel
@@ -28,13 +32,20 @@ class PodcastListViewModel
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    init {
-        fetchPodcastList()
-    }
+    val podcastPagingDataFlow: Flow<PagingData<Podcast>> =
+            podcastUseCase.getPodcastList().cachedIn(viewModelScope)
 
     private fun fetchPodcastList() {
         viewModelScope.launch(Dispatchers.IO) {
-            podcastUseCase.getPodcastList().collect(::handleDataState)
+            podcastUseCase.getPodcastList().collect{
+                handlePagingState(it)
+            }
+        }
+    }
+    private fun handlePagingState(sate: PagingData<Podcast>) {
+        viewModelScope.launch {
+            sate
+
         }
     }
 
