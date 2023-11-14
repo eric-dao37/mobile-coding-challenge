@@ -31,7 +31,7 @@ class PodcastRepositoryImpl(
             }
 
             // save the network data to database
-            insertPodcastList(podcastEntityList)
+            dao.insertAllPodcasts(podcastEntityList)
 
             // return data from local database
             dao.getAllPodcast().collect{ list->
@@ -79,16 +79,6 @@ class PodcastRepositoryImpl(
             dao.updatePodcast(podcast.toEntity())
         }catch (e: Exception){
             e.printStackTrace()
-        }
-    }
-
-    private suspend fun insertPodcastList(podcasts: List<PodcastEntity>) {
-        for(podcast in podcasts){
-            try {
-                dao.insertPodcast(podcastEntity = podcast)
-            }catch (e: Exception){
-                e.printStackTrace()
-            }
         }
     }
 }

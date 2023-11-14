@@ -13,6 +13,9 @@ interface PodcastDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertPodcast(podcastEntity: PodcastEntity)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAllPodcasts(podcastEntityList: List<PodcastEntity>)
+
     @Query(
         """
             SELECT *

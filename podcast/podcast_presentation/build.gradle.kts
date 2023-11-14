@@ -12,4 +12,6 @@ dependencies {
     implementation(project(Modules.core))
     implementation(project(Modules.podcastDomain))
     implementation(Coil.coilCompose)
+    api(Paging.pagingRuntime)
+    api(Paging.pagingCompose)
 }

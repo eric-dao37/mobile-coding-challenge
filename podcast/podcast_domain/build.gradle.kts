@@ -10,4 +10,6 @@ android {
 
 dependencies {
     implementation(project(Modules.core))
+
+    api(Paging.pagingCommon)
 }
